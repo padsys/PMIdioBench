@@ -1,0 +1,31 @@
+#
+# run command for this workload:
+# numactl -N 0 fio LibaioSeqR.fio  # it binds this FIO workload to CPU 0 only. It should be set according to /dev/nvme0n1 socket's number
+#
+[global]
+thread=1
+group_reporting
+#norandommap
+overwrite=1
+thinktime=0
+sync=1
+direct=1
+
+ioengine=sync
+iodepth=1
+
+directory=PMEM_DIR
+size=1GB  # Each file will have this size
+unlink=0
+
+time_based
+runtime=15
+ramp_time=5
+
+[SeqWrite]
+bs=BSIZE
+numjobs=NJOBS  # depending on CPU core count more can be better, but also can be a bottleneck
+
+rw=randrw
+rwmixread=100
+percentage_random=0

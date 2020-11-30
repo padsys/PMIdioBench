@@ -1,0 +1,36 @@
+#
+# run command for this workload:
+# numactl -N 0 fio LibpmemRandW.fio  # it binds this FIO workload to CPU 0 only. It should be set according to /dev/pmem0 socket's number
+#
+[global]
+thread=1
+group_reporting
+norandommap
+overwrite=1
+thinktime=0
+sync=0
+direct=0
+
+ioengine=libpmem
+iodepth=1
+
+#
+# Preparing namespace with commands:
+# mkfs.ext4 /dev/pmem0
+# mount /dev/pmem0 PMEM_DIR -o dax
+#
+directory=PMEM_DIR  # I'm working on directory; each of 'numjobs' gets its own file to work with
+size=1GB  # Each file will have this size
+unlink=0
+
+time_based
+runtime=15
+ramp_time=5
+
+[RandWrite]
+bs=BSIZE
+numjobs=NJOBS  # depending on CPU core count more can be better, but also can be a bottleneck
+
+rw=randrw
+rwmixread=0
+percentage_random=50

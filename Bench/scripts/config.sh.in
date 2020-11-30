@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Configuration parameters for experiments
+
+export PMEM_DIR1="/mnt/pmem1" # Mount point of DAX FS using NUMA node 0 PMEM
+
+export PMEM_DIR2="/mnt/pmem2" # Mount point of DAX FS using NUMA node 1 PMEM
+
+export FLASH_DIR="/mnt/ssd1" # Mount point of Flash SSD
+
+export JAVA_HOME="/usr/lib/jvm/jre" # JRE home
+
+export MONGODB_HOME="/opt/mongo" # MongoDB install dir
+
+export YCSB_HOME="/opt/ycsb" # YCSB install dir
+
+export FIO_HOME="/opt/fio" # fio install dir
+
+export FLAME_GRAPH_HOME="/opt/FlameGraph" # Flame Graph install dir
+
+export IPMW_HOME="/opt/intel/ipmwatch" # ipmwatch (part of Intel VTune Profiler) install dir
+
+export THREADS="1 2 4 8 16 28" # Thread count to run NUMA study experiments at
+
+export MAX_BW=8192 # Max PMEM B/W in MB/s of DAX FS on NUMA node 0
