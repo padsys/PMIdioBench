@@ -8,7 +8,7 @@ We provide the following in this repository:
 * Source for PMIdioBench, the micro-benchmark suite proposed in Section 3
 * Source for ring buffer designs proposed in Section 6
 * Source for linkedlist designs proposed in Section 6
-* A set of scripts to reproduce idiosyncrasy, numa study, and lock-free results presented in Sections 4, 5, and 6, repectively
+* A set of scripts to reproduce idiosyncrasy, numa study, and lock-free results presented in Sections 4, 5, and 6, respectively
 * A set of scripts and data files to plot all graphs in the paper
 
 # Directory Layout
@@ -57,3 +57,18 @@ We provide the following in this repository:
 * Open Scripts/graphs.ipynb in jupyter notebook
 * Run the complete script
 * Plotted graphs will be available in the Graphs directory
+
+# Reference
+
+Please cite PMIdioBench in your publications if it helps your research:
+
+```
+@article{gugnani-vldb21,
+  author = {Gugnani Shashank and Kashyap Arjun and Lu Xiaoyi},
+  title = {Understanding the Idiosyncrasies of Real Persistent Memory},
+  journal = {Proceedings of the VLDB Endowment},
+  volume = {14},
+  number = {4},
+  year = {2021},
+}
+```
