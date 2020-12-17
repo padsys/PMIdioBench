@@ -64,11 +64,12 @@ Please cite PMIdioBench in your publications if it helps your research:
 
 ```
 @article{gugnani-vldb21,
-  author = {Gugnani Shashank and Kashyap Arjun and Lu Xiaoyi},
+  author = {Gugnani, Shashank and Kashyap, Arjun and Lu, Xiaoyi},
   title = {Understanding the Idiosyncrasies of Real Persistent Memory},
   journal = {Proceedings of the VLDB Endowment},
   volume = {14},
   number = {4},
-  year = {2021},
+  pages = {626--639},
+  year = {2021}
 }
 ```
