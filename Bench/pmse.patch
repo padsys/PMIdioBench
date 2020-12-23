@@ -1,0 +1,100 @@
+diff --git a/src/pmse_engine.cpp b/src/pmse_engine.cpp
+index f94239c..cb0568e 100644
+--- a/src/pmse_engine.cpp
++++ b/src/pmse_engine.cpp
+@@ -35,6 +35,7 @@
+ #include "pmse_engine.h"
+ #include "pmse_record_store.h"
+ #include "pmse_sorted_data_interface.h"
++#include "pmse_tree.h"
+ 
+ #include <cstdlib>
+ #include <string>
+@@ -52,6 +53,11 @@
+ namespace mongo {
+ 
+ PmseEngine::PmseEngine(std::string dbpath) : _dbPath(dbpath) {
++    /* force-disable SDS feature during pool creation*/
++    int sds_write_value = 0;
++    pmemobj_ctl_set(NULL, "sds.at_create", &sds_write_value);
++    log() << "Size of node: " << sizeof(PmseTreeNode);
++
+     if(!boost::algorithm::ends_with(dbpath, "/")) {
+         _dbPath = _dbPath +"/";
+     }
+diff --git a/src/pmse_map.h b/src/pmse_map.h
+index 6b947df..b1df664 100644
+--- a/src/pmse_map.h
++++ b/src/pmse_map.h
+@@ -41,7 +41,7 @@
+ #include <libpmemobj++/pool.hpp>
+ #include <libpmemobj++/persistent_ptr.hpp>
+ #include <libpmemobj++/mutex.hpp>
+-#include <libpmemobj++/detail/pexceptions.hpp>
++#include <libpmemobj++/pexceptions.hpp>
+ #include <libpmemobj++/make_persistent_array_atomic.hpp>
+ 
+ #include <atomic>
+diff --git a/src/pmse_record_store.cpp b/src/pmse_record_store.cpp
+index 6a818ad..bf7921f 100644
+--- a/src/pmse_record_store.cpp
++++ b/src/pmse_record_store.cpp
+@@ -79,7 +79,7 @@ PmseRecordStore::PmseRecordStore(StringData ns,
+         if (!boost::filesystem::exists(mapper_filename.c_str())) {
+             try {
+                 _mapPool = pool<root>::create(mapper_filename, "pmse_mapper",
+-                                              (isSystemCollection(ns) ? 10 : 300)
++                                              (isSystemCollection(ns) ? 10 : 3000)
+                                               * PMEMOBJ_MIN_POOL, 0664);
+             } catch (std::exception &e) {
+                 log() << "Error handled: " << e.what();
+diff --git a/src/pmse_sorted_data_interface.cpp b/src/pmse_sorted_data_interface.cpp
+index 1f337b9..e2d332b 100644
+--- a/src/pmse_sorted_data_interface.cpp
++++ b/src/pmse_sorted_data_interface.cpp
+@@ -60,7 +60,14 @@ PmseSortedDataInterface::PmseSortedDataInterface(StringData ident,
+         if (pool_handler->count(ident.toString()) > 0) {
+             _pm_pool = pool<PmseTree>((*pool_handler)[ident.toString()]);
+         } else {
+-            std::string filepath = _dbpath.toString() + ident.toString();
++            std::string filepath;
++            char *path = getenv("INDEX_PATH");
++            if (path) {
++		std::string tmp = path;
++	        filepath = tmp + ident.toString();
++            } else {
++	        filepath = _dbpath.toString() + ident.toString();
++            }
+             if (desc->parentNS() == "local.startup_log" &&
+                 boost::filesystem::exists(filepath)) {
+                 log() << "Delete old startup log";
+@@ -68,7 +75,7 @@ PmseSortedDataInterface::PmseSortedDataInterface(StringData ident,
+             }
+             if (!boost::filesystem::exists(filepath)) {
+                 _pm_pool = pool<PmseTree>::create(filepath.c_str(), "pmse_index",
+-                                                  (isSystemCollection(desc->parentNS()) ? 10 : 30)
++                                                  (isSystemCollection(desc->parentNS()) ? 10 : 3000)
+                                                   * PMEMOBJ_MIN_POOL, 0664);
+             } else {
+                 _pm_pool = pool<PmseTree>::open(filepath.c_str(), "pmse_index");
+diff --git a/src/pmse_tree.h b/src/pmse_tree.h
+index df8808d..cce3a3b 100644
+--- a/src/pmse_tree.h
++++ b/src/pmse_tree.h
+@@ -51,7 +51,7 @@ using namespace pmem::obj;
+ 
+ namespace mongo {
+ 
+-const uint64_t TREE_ORDER = 7;  // number of elements in internal node
++const uint64_t TREE_ORDER = 6;  // number of elements in internal node
+ const int64_t BSON_MIN_SIZE = 5;
+ 
+ const uint64_t MIN_END = 1;
+@@ -90,6 +90,7 @@ struct PmseTreeNode {
+     persistent_ptr<PmseTreeNode> previous = nullptr;
+     persistent_ptr<PmseTreeNode> parent = nullptr;
+     p<bool> is_leaf = false;
++    p<bool> pad;
+     pmem::obj::shared_mutex _pmutex;
+ };
+ 
