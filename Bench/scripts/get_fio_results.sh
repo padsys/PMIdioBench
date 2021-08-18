@@ -28,8 +28,8 @@ for workload in ${WORKLOADS[*]}; do
 	for njobs in ${NJOBS[*]}; do
 		echo -n -e "$njobs\t"
 		for bsize in ${BSIZE[*]}; do
-			bw=$(grep bw results/"$ENGINE""$workload"-"$njobs"-"$bsize"-"$case".log | grep avg | cut -d , -f 4 | cut -d = -f 2)
-			if (( $(echo "$bw > 80000" |bc -l) )); then
+			bw=$(grep bw results/"$ENGINE""$workload"-"$njobs"-"$bsize"-"$case".log | grep avg | tail -n 1 | cut -d , -f 4 | cut -d = -f 2)
+			if (( $(echo "$bw > 80000" | bc -l) )); then
 				bw=$(echo "scale=2;$bw / 1024" | bc -l)
 			fi
 			echo -n -e "$bw\t"

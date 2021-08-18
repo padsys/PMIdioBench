@@ -117,8 +117,8 @@ function main()
 	sleep 5
 
 	# Persistent TX-free (ADR) Queue (experimental; does not provide linearizability)
-	$(tool_cmdline $TOOL tx-free-adr-$SIZE p_rb_q_adr.x) \
-	numactl -N 0 ./p_rb_q_adr.x true > output.log 2>&1
+	$(tool_cmdline $TOOL tx-free-adr-$SIZE p_rb_q_exp.x) \
+	numactl -N 0 ./p_rb_q_exp.x true > output.log 2>&1
 	sleep 2
 	if [[ "$GET_STATS" == "true" ]]; then
 		get_stats $TEST-lat-tx-free-adr-$SIZE.log TX-free-ADR
@@ -131,8 +131,8 @@ function main()
 	sleep 5
 
 	# Persistent TX (eADR) Queue
-	PMEM_NO_FLUSH=1 $(tool_cmdline $TOOL tx-eadr-$SIZE p_rb_q_pmemobj.x) \
-	numactl -N 0 ./p_rb_q_pmemobj.x > output.log 2>&1
+	PMEM_NO_FLUSH=1 $(tool_cmdline $TOOL tx-eadr-$SIZE p_rb_q_adr.x) \
+	numactl -N 0 ./p_rb_q_adr.x > output.log 2>&1
 	sleep 2
 	if [[ "$GET_STATS" == "true" ]]; then
 		get_stats $TEST-lat-tx-eadr-$SIZE.log TX-eADR
@@ -145,8 +145,8 @@ function main()
 	sleep 5
 
 	# Persistent TX (ADR) Queue
-	$(tool_cmdline $TOOL tx-adr-$SIZE p_rb_q_pmemobj.x) \
-	numactl -N 0 ./p_rb_q_pmemobj.x > output.log 2>&1
+	$(tool_cmdline $TOOL tx-adr-$SIZE p_rb_q_adr.x) \
+	numactl -N 0 ./p_rb_q_adr.x > output.log 2>&1
 	sleep 2
 	if [[ "$GET_STATS" == "true" ]]; then
 		get_stats $TEST-lat-tx-adr-$SIZE.log TX-ADR

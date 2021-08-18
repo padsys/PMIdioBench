@@ -9,12 +9,12 @@ echo "$0 $@"
 
 rm -rf /dev/shm/*
 echo "DRAM load and nt-store b/w"
-PMEM_DIR="/dev/shm" NJOBS="28" WORKLOADS="SeqR SeqW" PMEM_MOVNT_THRESHOLD=0 scripts/run_fio.sh i2-dram-nt
+PMEM_DIR="/dev/shm" NJOBS="28" WORKLOADS="SeqR SeqW" PMEM_IS_PMEM_FORCE=1 PMEM_MOVNT_THRESHOLD=0 scripts/run_fio.sh i2-dram-nt
 sleep 2
 NJOBS="28" WORKLOADS="SeqR SeqW" scripts/get_fio_results.sh i2-dram-nt
 sleep 2
 echo "DRAM store+clwb b/w"
-PMEM_DIR="/dev/shm" NJOBS="28" WORKLOADS="SeqW" PMEM_NO_MOVNT=1 scripts/run_fio.sh i2-dram-s
+PMEM_DIR="/dev/shm" NJOBS="28" WORKLOADS="SeqW" PMEM_IS_PMEM_FORCE=1 PMEM_NO_MOVNT=1 scripts/run_fio.sh i2-dram-s
 sleep 2
 NJOBS="28" WORKLOADS="SeqW" scripts/get_fio_results.sh i2-dram-s
 sleep 2

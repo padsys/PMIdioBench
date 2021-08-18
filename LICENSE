@@ -76,6 +76,6 @@ Portions of the following files are licensed under the GNU GPL v2.0 License:
 
   ring-buffer/p_rb_q_adr.cc
   ring-buffer/p_rb_q_eadr.cc
-  ring-buffer/p_rb_q_pmemobj.cc
+  ring-buffer/p_rb_q_exp.cc
 
 --------------------------------------------------

@@ -1,7 +1,7 @@
 # Artifact Overview
 
 This repository contains the code for our VLDB'21 paper,
-"Shashank Gugnani, Arjun Kashyap, and Xiaoyi Lu. Understanding the Idiosyncrasies of Real Persistent Memory".
+"Shashank Gugnani, Arjun Kashyap, and Xiaoyi Lu. [Understanding the Idiosyncrasies of Real Persistent Memory](http://vldb.org/pvldb/vol14/p626-gugnani.pdf)".
 
 We provide the following in this repository:
 

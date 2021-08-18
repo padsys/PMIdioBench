@@ -9,7 +9,7 @@ echo "$0 $@"
 
 rm -rf /dev/shm/*
 echo "DRAM Seq and Rand Read b/w"
-NJOBS=16 PMEM_DIR="/dev/shm" WORKLOADS="SeqR RandR" scripts/run_fio.sh i6-dram-bw
+NJOBS=16 PMEM_DIR="/dev/shm" WORKLOADS="SeqR RandR" PMEM_IS_PMEM_FORCE=1 scripts/run_fio.sh i6-dram-bw
 sleep 2
 NJOBS=16 WORKLOADS="SeqR RandR" scripts/get_fio_results.sh i6-dram-bw
 sleep 2

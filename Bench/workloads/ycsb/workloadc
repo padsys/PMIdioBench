@@ -23,7 +23,7 @@
 
 recordcount=2000000
 operationcount=2000000
-workload=com.yahoo.ycsb.workloads.CoreWorkload
+workload=site.ycsb.workloads.CoreWorkload
 
 readallfields=true
 
